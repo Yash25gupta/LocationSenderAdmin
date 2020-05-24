@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 TextView txtLatLng = tempView.findViewById(R.id.tmp_currentLatLng);
                                 TextView txtLastTime = tempView.findViewById(R.id.tmp_lastUpdateTxt);
 
-
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
