@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setSupportActionBar(toolbar);
         navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -128,12 +129,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mnu_home:
-                drawerLayout.closeDrawer(GravityCompat.START);
+                //drawerLayout.closeDrawer(GravityCompat.START);
+                Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.mnu_menu:
+                Toast.makeText(this, "Menu", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.mnu_menu2:
+                Toast.makeText(this, "Menu2", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
         }
-        drawerLayout.closeDrawer(GravityCompat.START);
+        //drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 

@@ -1,13 +1,21 @@
 package com.location.jobservice.admin;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -23,6 +31,8 @@ import java.util.List;
 
 public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCallback, SeekBar.OnSeekBarChangeListener {
     private static final String TAG = "DisplayPolyLine";
+    private boolean isShowingBoard = true;
+    private LinearLayout settingsLayout;
     // Initialize Variable
     GoogleMap gMap;
     SeekBar seekWidth, seekRed, seekGreen, seekBlue;
@@ -39,12 +49,16 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_poly_line);
 
+        Toolbar toolbar = findViewById(R.id.pl_toolbar);
+        setSupportActionBar(toolbar);
+
         seekWidth = findViewById(R.id.pl_seekWidth);
         seekRed = findViewById(R.id.pl_seekRed);
         seekGreen = findViewById(R.id.pl_seekGreen);
         seekBlue = findViewById(R.id.pl_seekBlue);
         btnDraw = findViewById(R.id.pl_btnDraw);
         btnClear = findViewById(R.id.pl_btnClear);
+        settingsLayout = findViewById(R.id.pl_settingsLayout);
 
         // Initialize SupportMapFragment
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -155,6 +169,40 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.mnu_home:
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
+                return true;
+            case R.id.mnu_eye:
+                if (isShowingBoard) {
+                    settingsLayout.setVisibility(View.GONE);
+                    isShowingBoard = false;
+                } else {
+                    settingsLayout.setVisibility(View.VISIBLE);
+                    isShowingBoard = true;
+                }
+                return true;
+            case R.id.mnu_menu:
+                Toast.makeText(this, "Menu", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.mnu_menu2:
+                Toast.makeText(this, "Menu2", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }
