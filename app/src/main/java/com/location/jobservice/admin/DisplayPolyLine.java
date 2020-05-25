@@ -104,28 +104,31 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
                     }
                 });
 
-        btnDraw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (polyline != null) polyline.remove();
-                PolylineOptions polylineOptions = new PolylineOptions().addAll(latLngList).clickable(true);
-                polyline = gMap.addPolyline(polylineOptions);
-                polyline.setColor(Color.BLACK);
-                polyline.setWidth(3);
-            }
-        });
-
-        btnClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (polyline != null) polyline.remove();
-                for (Marker marker : markerList) marker.remove();
-                latLngList.clear();
-                markerList.clear();
-            }
-        });
+        btnDraw.setOnClickListener(DrawPolyline);
+        btnClear.setOnClickListener(ClearMap);
 
     }
+
+    View.OnClickListener DrawPolyline = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (polyline != null) polyline.remove();
+            PolylineOptions polylineOptions = new PolylineOptions().addAll(latLngList).clickable(true);
+            polyline = gMap.addPolyline(polylineOptions);
+            polyline.setColor(Color.BLACK);
+            polyline.setWidth(3);
+        }
+    };
+
+    View.OnClickListener ClearMap = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (polyline != null) polyline.remove();
+            for (Marker marker : markerList) marker.remove();
+            latLngList.clear();
+            markerList.clear();
+        }
+    };
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
