@@ -25,15 +25,25 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCallback, SeekBar.OnSeekBarChangeListener {
     private static final String TAG = "DisplayPolyLine";
+    private static final String collection = "Locations";
     private boolean isShowingBoard = true;
     private LinearLayout settingsLayout;
-    // Initialize Variable
+    private FirebaseFirestore fStore;
+    private String target;
+    private List<Map<String, Double>> history = new ArrayList<>();
+
     GoogleMap gMap;
     SeekBar seekWidth, seekRed, seekGreen, seekBlue;
     Button btnDraw, btnClear;
@@ -51,6 +61,12 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
 
         Toolbar toolbar = findViewById(R.id.pl_toolbar);
         setSupportActionBar(toolbar);
+        if (getIntent().getExtras() == null){
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        } else {
+            target = getIntent().getExtras().getString("name");
+        }
 
         seekWidth = findViewById(R.id.pl_seekWidth);
         seekRed = findViewById(R.id.pl_seekRed);
@@ -59,17 +75,39 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
         btnDraw = findViewById(R.id.pl_btnDraw);
         btnClear = findViewById(R.id.pl_btnClear);
         settingsLayout = findViewById(R.id.pl_settingsLayout);
+        fStore = FirebaseFirestore.getInstance();
 
         // Initialize SupportMapFragment
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.pl_googleMap);
         supportMapFragment.getMapAsync(this);
 
+        // Get History List
+        fStore.collection(collection).document(target)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()){
+                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                history = (List<Map<String, Double>>) document.get("History");
+                                Log.d(TAG, "history: " + history);
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+
+
         btnDraw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "latLngList: " + latLngList);
-                // latLngList: [lat/lng: (22.545407609795284,1.2740881741046906), lat/lng: (15.715659846482021,17.871770225465298)]
+                // latLngList==> [lat/lng: (22.545407609795284,1.2740881741046906), lat/lng: (15.715659846482021,17.871770225465298)]
                 // Draw Polyline on Map
                 if (polyline != null) polyline.remove();
                 // Create PolylineOptions
@@ -115,8 +153,7 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
                 // Add LatLng and Marker
                 latLngList.add(latLng);
                 markerList.add(marker);
-                Log.d(TAG, "latLng: " + latLng);
-                // latLng: lat/lng: (15.715659846482021,17.871770225465298)
+                // latLng==> lat/lng: (15.715659846482021,17.871770225465298)
             }
         });
     }
