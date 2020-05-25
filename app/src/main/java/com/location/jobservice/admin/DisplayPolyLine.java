@@ -42,7 +42,7 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
     private LinearLayout settingsLayout;
     private FirebaseFirestore fStore;
     private String target;
-    private List<Map<String, Double>> history = new ArrayList<>();
+    private List<Map<String, Double>> historyList = new ArrayList<>();
 
     GoogleMap gMap;
     SeekBar seekWidth, seekRed, seekGreen, seekBlue;
@@ -92,8 +92,17 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()){
                                 Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                history = (List<Map<String, Double>>) document.get("History");
-                                Log.d(TAG, "history: " + history);
+                                historyList = (List<Map<String, Double>>) document.get("History");
+                                // history: [{Lng=11.11, Lat=11.11}, {Lng=22.22, Lat=22.22}, {Lng=78.06139, Lat=27.889661}]
+                                for (Map<String, Double> map : historyList){
+                                    // map: {Lng=11.11, Lat=11.11}
+                                    LatLng latLng = new LatLng(map.get("Lat"), map.get("Lng"));
+                                    MarkerOptions markerOptions = new MarkerOptions().position(latLng);
+                                    Marker marker = gMap.addMarker(markerOptions);
+                                    markerList.add(marker);
+                                    latLngList.add(latLng);
+                                }
+
                             } else {
                                 Log.d(TAG, "No such document");
                             }
@@ -143,7 +152,7 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
-        gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        /*gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
                 // Create MarkerOptions
@@ -153,9 +162,8 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
                 // Add LatLng and Marker
                 latLngList.add(latLng);
                 markerList.add(marker);
-                // latLng==> lat/lng: (15.715659846482021,17.871770225465298)
             }
-        });
+        });*/
     }
 
     private void setWidth() {
