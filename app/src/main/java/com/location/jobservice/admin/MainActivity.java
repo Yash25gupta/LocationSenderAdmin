@@ -118,9 +118,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String id = String.valueOf(v.getId());
             String name = (String) v.getTag();
             Toast.makeText(MainActivity.this, id + " " + name, Toast.LENGTH_SHORT).show();
-            //Intent intent = new Intent(getApplicationContext(), .class);
-            //intent.putExtra("name", name);
-            //startActivity(intent);
+            Intent intent = new Intent(getApplicationContext(), DisplayPolyLine.class);
+            intent.putExtra("name", name);
+            startActivity(intent);
         }
     };
 

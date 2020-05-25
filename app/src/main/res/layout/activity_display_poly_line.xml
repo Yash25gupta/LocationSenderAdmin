@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DisplayPolyLine">
+
+    <fragment
+        android:id="@+id/pl_googleMap"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/pl_settingsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Polyline Width"
+            android:textStyle="bold" />
+
+        <SeekBar
+            android:id="@+id/pl_seekWidth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:max="20"
+            android:progress="3"
+            android:progressTint="#A9A9A9"
+            android:thumbTint="#A9A9A9" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Polyline Color"
+            android:textStyle="bold" />
+
+        <SeekBar
+            android:id="@+id/pl_seekRed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:max="255"
+            android:progressTint="#FF0000"
+            android:thumbTint="#FF0000" />
+
+        <SeekBar
+            android:id="@+id/pl_seekGreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:max="255"
+            android:progressTint="#00FF00"
+            android:thumbTint="#00FF00" />
+
+        <SeekBar
+            android:id="@+id/pl_seekBlue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:max="255"
+            android:progressTint="#0000FF"
+            android:thumbTint="#0000FF" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/pl_btnDraw"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:text="Draw Polyline" />
+
+            <Button
+                android:id="@+id/pl_btnClear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="Clear" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
