@@ -42,7 +42,7 @@
             android:layout_height="26dp"
             android:layout_gravity="start"
             android:layout_marginStart="100dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="45dp"
             android:text="Sending Data"
             android:textColor="#000000"
             android:textSize="20sp"/>
@@ -53,17 +53,17 @@
             android:layout_height="26dp"
             android:layout_gravity="start"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="95dp"
+            android:layout_marginTop="100dp"
             android:text="Current LatLng"
             android:textColor="#000000"
-            android:textSize="20sp"/>
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tmp_lastUpdate"
             android:layout_width="wrap_content"
             android:layout_height="26dp"
             android:layout_gravity="end"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="40dp"
             android:text="Last Update"
             android:textColor="#000000"
             android:textSize="20sp"/>
@@ -73,10 +73,10 @@
             android:layout_width="wrap_content"
             android:layout_height="26dp"
             android:layout_gravity="end"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="70dp"
             android:text="Last Time"
             android:textColor="#000000"
-            android:textSize="20sp"/>
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tmp_touchTV"

@@ -1,11 +1,15 @@
 package com.location.jobservice.admin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -29,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private Toolbar toolbar;
     private View headerView;
+    private LinearLayout mainLayout;
+    private LayoutInflater inflater;
+    private int intNum = 0;
 
     private FirebaseFirestore fStore;
 
@@ -40,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.mn_DrawerLayout);
         navigationView = findViewById(R.id.mn_navView);
         toolbar = findViewById(R.id.mn_toolbar);
+        mainLayout = findViewById(R.id.mn_LinearLayout);
+        inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         headerView = navigationView.getHeaderView(0);
         fStore = FirebaseFirestore.getInstance();
 
@@ -58,21 +67,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            LayoutInflater li = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                String Name = document.getId().toString().trim();
-                                String SendData = document.get("sendData").toString().trim();
-                                String Lat = document.get("current.Lat").toString().trim();
-                                String Lng = document.get("current.Lng").toString().trim();
-
-                                // Create multiple card view
-                                View tempView = li.inflate(R.layout.list_templete, null);
-                                TextView txtName = tempView.findViewById(R.id.tmp_name);
-                                TextView txtSend = tempView.findViewById(R.id.tmp_sendingData);
-                                TextView txtLatLng = tempView.findViewById(R.id.tmp_currentLatLng);
-                                TextView txtLastTime = tempView.findViewById(R.id.tmp_lastUpdateTxt);
-
+                                createCardView(document);
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -80,8 +77,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
-
     }
+
+    private void createCardView(QueryDocumentSnapshot document){
+        String Name = document.getId().trim();
+        String SendData = document.get("sendData").toString().trim();
+        String Lat = document.get("current.Lat").toString().trim();
+        String Lng = document.get("current.Lng").toString().trim();
+        String LastTime = "Last Update";
+        String LastTimeTxt = "lastTimeHere";
+        String latLng = "Lat: " + Lat + " Lng: " + Lng;
+
+        // Create multiple card view
+        View tempView = inflater.inflate(R.layout.list_templete, null);
+        TextView txtName = tempView.findViewById(R.id.tmp_name);
+        TextView txtSend = tempView.findViewById(R.id.tmp_sendingData);
+        TextView txtLatLng = tempView.findViewById(R.id.tmp_currentLatLng);
+        TextView txtLastTime = tempView.findViewById(R.id.tmp_lastUpdate);
+        TextView txtLastTimeTxt = tempView.findViewById(R.id.tmp_lastUpdateTxt);
+        TextView txtTouch = tempView.findViewById(R.id.tmp_touchTV);
+        ImageView imgPhone = tempView.findViewById(R.id.tmp_img);
+
+        txtName.setText(Name);
+        txtSend.setText(SendData);
+        txtLatLng.setText(latLng);
+        txtLastTime.setText(LastTime);
+        txtLastTimeTxt.setText(LastTimeTxt);
+        imgPhone.setImageResource(R.drawable.ic_smartphone_black);
+        txtTouch.setOnClickListener(cardSelected);
+        txtTouch.setId(intNum);
+        txtTouch.setTag(Name);
+
+        intNum++;
+        mainLayout.addView(tempView);
+    }
+
+    View.OnClickListener cardSelected = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String id = String.valueOf(v.getId());
+            String name = (String) v.getTag();
+            Toast.makeText(MainActivity.this, id + " " + name, Toast.LENGTH_SHORT).show();
+            //Intent intent = new Intent(getApplicationContext(), .class);
+            //intent.putExtra("name", name);
+            //startActivity(intent);
+        }
+    };
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
