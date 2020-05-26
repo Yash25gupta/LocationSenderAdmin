@@ -5,16 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".DisplayPolyLine">
+    tools:context=".Settings">
 
     <include
-        android:id="@+id/pl_toolbar"
+        android:id="@+id/set_toolbar"
         layout="@layout/toolbar" />
 
-    <fragment
-        android:id="@+id/pl_googleMap"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+
 
 </LinearLayout>

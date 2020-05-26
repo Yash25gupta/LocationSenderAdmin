@@ -35,8 +35,6 @@ import java.util.Map;
 
 public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCallback {
     private static final String collection = "Locations";
-    private boolean isShowingBoard = true;
-    private LinearLayout settingsLayout;
     private String target;
     private List<Map<String, Double>> historyList = new ArrayList<>();
 
@@ -44,7 +42,6 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
     private Polyline polyline = null;
     private List<LatLng> latLngList = new ArrayList<>();
     private List<Marker> markerList = new ArrayList<>();
-    Button btnDraw, btnClear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +58,6 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
             target = getIntent().getExtras().getString("name");
         }
 
-        btnDraw = findViewById(R.id.pl_btnDraw);
-        btnClear = findViewById(R.id.pl_btnClear);
-        settingsLayout = findViewById(R.id.pl_settingsLayout);
         FirebaseFirestore fStore = FirebaseFirestore.getInstance();
 
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -104,31 +98,22 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
                     }
                 });
 
-        btnDraw.setOnClickListener(DrawPolyline);
-        btnClear.setOnClickListener(ClearMap);
-
     }
 
-    View.OnClickListener DrawPolyline = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (polyline != null) polyline.remove();
-            PolylineOptions polylineOptions = new PolylineOptions().addAll(latLngList).clickable(true);
-            polyline = gMap.addPolyline(polylineOptions);
-            polyline.setColor(Color.BLACK);
-            polyline.setWidth(3);
-        }
-    };
+    private void DrawPolyline() {
+        if (polyline != null) polyline.remove();
+        PolylineOptions polylineOptions = new PolylineOptions().addAll(latLngList).clickable(true);
+        polyline = gMap.addPolyline(polylineOptions);
+        polyline.setColor(Color.BLACK);
+        polyline.setWidth(3);
+    }
 
-    View.OnClickListener ClearMap = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (polyline != null) polyline.remove();
-            for (Marker marker : markerList) marker.remove();
-            latLngList.clear();
-            markerList.clear();
-        }
-    };
+    private void clearMap() {
+        if (polyline != null) polyline.remove();
+        for (Marker marker : markerList) marker.remove();
+        latLngList.clear();
+        markerList.clear();
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -139,7 +124,7 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.menu2, menu);
         return true;
     }
 
@@ -147,24 +132,28 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.mnu_home:
+            case R.id.mn2_home:
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
                 return true;
-            case R.id.mnu_eye:
-                if (isShowingBoard) {
-                    settingsLayout.setVisibility(View.GONE);
-                    isShowingBoard = false;
+            case R.id.mn2_drawPolyLine:
+                if (polyline != null) {
+                    polyline.remove();
+                    polyline = null;
                 } else {
-                    settingsLayout.setVisibility(View.VISIBLE);
-                    isShowingBoard = true;
+                    DrawPolyline();
                 }
                 return true;
-            case R.id.mnu_menu:
-                Toast.makeText(this, "Menu", Toast.LENGTH_SHORT).show();
+            case R.id.mn2_setting:
+                Intent i = new Intent(getApplicationContext(), Settings.class);
+                i.putExtra("name", target);
+                startActivity(i);
                 return true;
-            case R.id.mnu_menu2:
-                Toast.makeText(this, "Menu2", Toast.LENGTH_SHORT).show();
+            case R.id.mn2_clear:
+                clearMap();
+                return true;
+            case R.id.mn2_about:
+                Toast.makeText(this, "About Us", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

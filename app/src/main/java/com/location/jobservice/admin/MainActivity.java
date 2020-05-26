@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String Lat = document.get("current.Lat").toString().trim();
         String Lng = document.get("current.Lng").toString().trim();
         String LastTime = "Last Update";
-        String LastTimeTxt = "lastTimeHere";
+        String LastTimeTxt = document.get("lastTimeUpdate").toString().trim();
         String latLng = "Lat: " + Lat + " Lng: " + Lng;
 
         // Create multiple card view
