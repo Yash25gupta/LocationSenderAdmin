@@ -2,7 +2,6 @@ package com.location.jobservice.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,13 +25,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private static final String TAG = "MainActivity";
     private static final String collection = "Locations";
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private Toolbar toolbar;
-    private View headerView;
     private LinearLayout mainLayout;
     private LayoutInflater inflater;
     private int intNum = 0;
@@ -49,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.mn_toolbar);
         mainLayout = findViewById(R.id.mn_LinearLayout);
         inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        headerView = navigationView.getHeaderView(0);
         fStore = FirebaseFirestore.getInstance();
 
         setSupportActionBar(toolbar);
@@ -69,18 +65,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
                                 createCardView(document);
                             }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
 
     }
 
-    private void createCardView(QueryDocumentSnapshot document){
+    private void createCardView(QueryDocumentSnapshot document) {
         String Name = document.getId().trim();
         String SendData = document.get("sendData").toString().trim();
         String Lat = document.get("current.Lat").toString().trim();
