@@ -33,12 +33,12 @@ import java.util.Map;
 public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCallback {
     private static final String collection = "Locations";
     private String target;
-    private List<Map<String, Double>> historyList = new ArrayList<>();
-
     private GoogleMap gMap;
     private Polyline polyline = null;
     private List<LatLng> latLngList = new ArrayList<>();
     private List<Marker> markerList = new ArrayList<>();
+    private List<Map<String, Double>> historyList = new ArrayList<>();
+    private boolean isMarkers = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,21 +97,6 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
 
     }
 
-    private void DrawPolyline() {
-        if (polyline != null) polyline.remove();
-        PolylineOptions polylineOptions = new PolylineOptions().addAll(latLngList).clickable(true);
-        polyline = gMap.addPolyline(polylineOptions);
-        polyline.setColor(Color.BLACK);
-        polyline.setWidth(3);
-    }
-
-    private void clearMap() {
-        if (polyline != null) polyline.remove();
-        for (Marker marker : markerList) marker.remove();
-        latLngList.clear();
-        markerList.clear();
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
@@ -129,25 +114,29 @@ public class DisplayPolyLine extends AppCompatActivity implements OnMapReadyCall
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.mn2_home:
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
-                return true;
-            case R.id.mn2_drawPolyLine:
+            case R.id.mn2_polyLine:
                 if (polyline != null) {
                     polyline.remove();
                     polyline = null;
                 } else {
-                    DrawPolyline();
+                    PolylineOptions polylineOptions = new PolylineOptions().addAll(latLngList).clickable(true);
+                    polyline = gMap.addPolyline(polylineOptions);
+                    polyline.setColor(Color.BLACK);
+                    polyline.setWidth(3);
                 }
+                return true;
+            case R.id.mn2_marker:
+                for (Marker marker : markerList) marker.setVisible(isMarkers);
+                isMarkers = !isMarkers;
+                return true;
+            case R.id.mn2_home:
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
                 return true;
             case R.id.mn2_setting:
                 Intent i = new Intent(getApplicationContext(), Settings.class);
                 i.putExtra("name", target);
                 startActivity(i);
-                return true;
-            case R.id.mn2_clear:
-                clearMap();
                 return true;
             case R.id.mn2_about:
                 Toast.makeText(this, "About Us", Toast.LENGTH_SHORT).show();

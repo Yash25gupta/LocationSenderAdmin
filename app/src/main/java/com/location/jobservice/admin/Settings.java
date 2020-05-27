@@ -73,4 +73,8 @@ public class Settings extends AppCompatActivity {
         docReference.set(send, SetOptions.merge());
     }
 
+    public void deleteBoxClicked(View view) {
+        // Create Alert Dialogue
+
+    }
 }

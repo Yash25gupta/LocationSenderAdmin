@@ -3,24 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/mn2_polyLine"
+        android:icon="@drawable/ic_polyline"
+        android:title="Draw Line"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/mn2_marker"
+        android:icon="@drawable/ic_marker"
+        android:title="Draw Line"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/mn2_home"
         android:icon="@drawable/ic_home"
         android:title="Home"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/mn2_drawPolyLine"
-        android:icon="@drawable/ic_polyline"
-        android:title="Draw Line"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/mn2_setting"
         android:icon="@drawable/ic_settings"
         android:title="Settings"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/mn2_clear"
-        android:icon="@drawable/ic_clear"
-        android:title="Clear Map"
         app:showAsAction="never" />
     <item
         android:id="@+id/mn2_about"
